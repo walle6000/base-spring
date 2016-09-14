@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hd.daiban.dao.PendingTransactionDaoInf">
+	<!-- SQl结尾不能加分号 -->
+	<!-- 新增资源 -->
+	<insert id="save" parameterType="com.hd.daiban.bean.PendingTransaction">
+		INSERT INTO HDPI_PENDING_TRANSACTION
+  			(	
+  			    <!-- ID, -->
+  				TRANSACTION_ID,
+  				ISNOTIFIED, 
+  				TRANSACTION_PRIORITY, 
+  				RECIPIENT, 
+  				STATUS, 
+  				TRANSACTION_DATE, 
+  				TRANSACTION_SUBJECT, 
+  				TRANSACTION_TYPE, 
+  				TRANSACTION_URL,
+  				MOBILE
+			)
+		VALUES
+  		    (
+  		    <!-- SEQ_HDPI_PENDING.nextval, -->
+  			#{transactionId,jdbcType=VARCHAR},
+   			#{isNotified,jdbcType=VARCHAR},
+   			#{priority,jdbcType=VARCHAR},
+   			#{recipient,jdbcType=VARCHAR},
+   			#{status,jdbcType=VARCHAR},
+   			#{transactionDate,jdbcType=VARCHAR},
+   			#{transactionName,jdbcType=VARCHAR},
+   			#{transactionType,jdbcType=VARCHAR},
+   			#{url,jdbcType=VARCHAR},
+   			#{mobile,jdbcType=VARCHAR}
+   		    )
+	</insert>
+	
+	<update id="update" parameterType="com.hd.daiban.bean.PendingTransaction">
+		UPDATE HDPI_PENDING_TRANSACTION T  
+			<set>
+				<!-- T.TRANSACTION_ID = #{transactionId,jdbcType=VARCHAR}, -->
+				T.ISNOTIFIED = #{isNotified,jdbcType=VARCHAR},
+				T.TRANSACTION_PRIORITY = #{priority,jdbcType=VARCHAR},
+				T.RECIPIENT = #{recipient,jdbcType=VARCHAR},
+				T.STATUS = #{status,jdbcType=VARCHAR},
+				T.TRANSACTION_DATE = #{transactionDate,jdbcType=VARCHAR},
+				T.TRANSACTION_SUBJECT = #{transactionName,jdbcType=VARCHAR},
+				T.TRANSACTION_TYPE = #{transactionType,jdbcType=VARCHAR},
+				T.TRANSACTION_URL = #{url,jdbcType=VARCHAR},
+				T.MOBILE = #{mobile,jdbcType=VARCHAR}
+			</set>
+			WHERE
+				T.TRANSACTION_ID = #{transactionId,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="getById" parameterType="java.lang.Object" resultType="com.hd.daiban.bean.PendingTransaction">
+		SELECT 
+		    <!-- T.ID AS id, -->
+		    T.TRANSACTION_ID AS transactionId,
+  			T.ISNOTIFIED AS isNotified, 
+  			T.TRANSACTION_PRIORITY AS priority, 
+  			T.RECIPIENT AS recipient, 
+  			T.STATUS AS status, 
+  			T.TRANSACTION_DATE AS transactionDate, 
+  			T.TRANSACTION_SUBJECT AS transactionName, 
+  			T.TRANSACTION_TYPE AS transactionType, 
+  			T.TRANSACTION_URL AS url,
+  			T.MOBILE AS mobile
+		FROM 
+			HDPI_PENDING_TRANSACTION T
+		WHERE
+			T.TRANSACTION_ID = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getAll" resultType="com.hd.daiban.bean.PendingTransaction">
+		SELECT 
+		    <!-- T.ID AS id, -->
+		    T.TRANSACTION_ID AS transactionId,
+  			T.ISNOTIFIED AS isNotified, 
+  			T.TRANSACTION_PRIORITY AS priority, 
+  			T.RECIPIENT AS recipient, 
+  			T.STATUS AS status, 
+  			T.TRANSACTION_DATE AS transactionDate, 
+  			T.TRANSACTION_SUBJECT AS transactionName, 
+  			T.TRANSACTION_TYPE AS transactionType, 
+  			T.TRANSACTION_URL AS url,
+  			T.MOBILE AS mobile
+		FROM 
+			HDPI_PENDING_TRANSACTION T
+		ORDER BY 
+		    T.TRANSACTION_DATE DESC 	
+	</select>
+	
+	<delete id="delete">
+		DELETE HDPI_PENDING_TRANSACTION T
+	</delete>
+	
+	
+	<insert id="saveAll" parameterType="java.util.ArrayList">
+			INSERT  ALL
+			<foreach collection="list" item="pt" index="index">
+		    INTO HDPI_PENDING_TRANSACTION (
+  				TRANSACTION_ID,
+  				ISNOTIFIED, 
+  				TRANSACTION_PRIORITY, 
+  				RECIPIENT, 
+  				STATUS, 
+  				TRANSACTION_DATE, 
+  				TRANSACTION_SUBJECT, 
+  				TRANSACTION_TYPE, 
+  				TRANSACTION_URL,
+  				MOBILE
+			)
+			VALUES(
+				   #{pt.transactionId,jdbcType=VARCHAR},
+   			       #{pt.isNotified,jdbcType=VARCHAR},
+   			       #{pt.priority,jdbcType=VARCHAR},
+   			       #{pt.recipient,jdbcType=VARCHAR},
+   			       #{pt.status,jdbcType=VARCHAR},
+   			       #{pt.transactionDate,jdbcType=VARCHAR},
+   			       #{pt.transactionName,jdbcType=VARCHAR},
+   			       #{pt.transactionType,jdbcType=VARCHAR},
+   			       #{pt.url,jdbcType=VARCHAR},
+   			       #{pt.mobile,jdbcType=VARCHAR}
+			)
+			</foreach>
+			SELECT 1 FROM DUAL
+	</insert>
+	
+	
+	<update id="updateAll" parameterType="java.util.ArrayList">
+		<foreach collection="list" item="pt" index="index" open="begin" close=";end;" separator=";">
+			UPDATE HDPI_PENDING_TRANSACTION T  
+			<set>
+				<!-- T.TRANSACTION_ID = #{pt.transactionId,jdbcType=VARCHAR}, -->
+				T.ISNOTIFIED = #{pt.isNotified,jdbcType=VARCHAR},
+				T.TRANSACTION_PRIORITY = #{pt.priority,jdbcType=VARCHAR},
+				T.RECIPIENT = #{pt.recipient,jdbcType=VARCHAR},
+				T.STATUS = #{pt.status,jdbcType=VARCHAR},
+				T.TRANSACTION_DATE = #{pt.transactionDate,jdbcType=VARCHAR},
+				T.TRANSACTION_SUBJECT = #{pt.transactionName,jdbcType=VARCHAR},
+				T.TRANSACTION_TYPE = #{pt.transactionType,jdbcType=VARCHAR},
+				T.TRANSACTION_URL = #{pt.url,jdbcType=VARCHAR},
+				T.MOBILE = #{pt.mobile,jdbcType=VARCHAR}
+			</set>
+			WHERE
+				T.TRANSACTION_ID = #{pt.transactionId,jdbcType=VARCHAR}
+		</foreach>
+	</update>
+	
+	<delete id="deletePendingTransactions" parameterType="java.lang.String">
+		DELETE HDPI_PENDING_TRANSACTION T WHERE T.TRANSACTION_TYPE=#{transactionType}
+	</delete>
+	
+	<select id="getAllTransactionsByType" parameterType="java.lang.String" resultType="com.hd.daiban.bean.PendingTransaction">
+		SELECT 
+		    <!-- T.ID AS id, -->
+		    T.TRANSACTION_ID AS transactionId,
+  			T.ISNOTIFIED AS isNotified, 
+  			T.TRANSACTION_PRIORITY AS priority, 
+  			T.RECIPIENT AS recipient, 
+  			T.STATUS AS status, 
+  			T.TRANSACTION_DATE AS transactionDate, 
+  			T.TRANSACTION_SUBJECT AS transactionName, 
+  			T.TRANSACTION_TYPE AS transactionType, 
+  			T.TRANSACTION_URL AS url,
+  			T.MOBILE AS mobile
+		FROM 
+			HDPI_PENDING_TRANSACTION T
+	    WHERE 
+	        T.TRANSACTION_TYPE=#{transactionType}
+	    ORDER BY 
+		    T.TRANSACTION_DATE DESC 
+	</select>
+	
+	<select id="getAllTransactionType" resultType="java.lang.String">
+		SELECT distinct
+  			T.TRANSACTION_TYPE AS transactionType
+		FROM 
+			HDPI_PENDING_TRANSACTION T
+		ORDER BY 
+		    T.TRANSACTION_TYPE DESC 	
+	</select>
+	
+	<select id="getTransactionTypeByUserName" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT distinct
+  			T.TRANSACTION_TYPE AS transactionType
+		FROM 
+			HDPI_PENDING_TRANSACTION T
+		WHERE 
+	        T.RECIPIENT=#{userName}
+	    ORDER BY 
+		    T.TRANSACTION_TYPE DESC 
+	</select>
+	
+	<select id="getUserPendingTransactionByType" parameterType="java.lang.String" resultType="com.hd.daiban.bean.PendingTransaction">
+		SELECT 
+		    <!-- T.ID AS id, -->
+		    T.TRANSACTION_ID AS transactionId,
+  			T.ISNOTIFIED AS isNotified, 
+  			T.TRANSACTION_PRIORITY AS priority, 
+  			T.RECIPIENT AS recipient, 
+  			T.STATUS AS status, 
+  			T.TRANSACTION_DATE AS transactionDate, 
+  			T.TRANSACTION_SUBJECT AS transactionName, 
+  			T.TRANSACTION_TYPE AS transactionType, 
+  			T.TRANSACTION_URL AS url,
+  			T.MOBILE AS mobile
+		FROM 
+			HDPI_PENDING_TRANSACTION T
+		WHERE
+			T.RECIPIENT=#{userName}	AND T.TRANSACTION_TYPE=#{transactionType}
+		ORDER BY 
+		    T.TRANSACTION_DATE DESC
+	</select>
+	
+	<select id="getSendMessageForPendingTransactions" resultType="com.hd.daiban.bean.PendingTransaction">
+	    SELECT 
+		    <!-- T.ID AS id, -->
+		    T.TRANSACTION_ID AS transactionId,
+  			T.ISNOTIFIED AS isNotified, 
+  			T.TRANSACTION_PRIORITY AS priority, 
+  			T.RECIPIENT AS recipient, 
+  			T.STATUS AS status, 
+  			T.TRANSACTION_DATE AS transactionDate, 
+  			T.TRANSACTION_SUBJECT AS transactionName, 
+  			T.TRANSACTION_TYPE AS transactionType, 
+  			T.TRANSACTION_URL AS url,
+  			U.MOBILE AS mobile
+		FROM 
+			HDPI_PENDING_TRANSACTION T INNER JOIN HDPI_USER U ON T.RECIPIENT = U.USERID
+		WHERE 
+		    U.MOBILE IS NOT NULL AND T.ISNOTIFIED = 'N'
+	</select>
+	
+	<select id="getUserPendingTransaction" parameterType="java.lang.String" resultType="com.hd.daiban.bean.PendingTransaction">
+		SELECT 
+		    <!-- T.ID AS id, -->
+		    T.TRANSACTION_ID AS transactionId,
+  			T.ISNOTIFIED AS isNotified, 
+  			T.TRANSACTION_PRIORITY AS priority, 
+  			T.RECIPIENT AS recipient, 
+  			T.STATUS AS status, 
+  			T.TRANSACTION_DATE AS transactionDate, 
+  			T.TRANSACTION_SUBJECT AS transactionName, 
+  			T.TRANSACTION_TYPE AS transactionType, 
+  			T.TRANSACTION_URL AS url,
+  			T.MOBILE AS mobile
+		FROM 
+			HDPI_PENDING_TRANSACTION T
+		WHERE
+			T.RECIPIENT=#{userName}
+		ORDER BY 
+		    T.TRANSACTION_DATE DESC	
+	</select>
+</mapper>  

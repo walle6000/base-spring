@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<weblogic-web-app xmlns="http://www.bea.com/ns/weblogic/90">
+	<container-descriptor>
+		<prefer-web-inf-classes>true</prefer-web-inf-classes>
+		<!-- <index-directory-enabled>true</index-directory-enabled>  -->
+		<show-archived-real-path-enabled>true</show-archived-real-path-enabled>
+	</container-descriptor>
+	<charset-params>
+		<input-charset>
+			<resource-path>/*</resource-path>
+			<java-charset-name>UTF-8</java-charset-name>
+		</input-charset>
+	</charset-params>
+	<context-root>hddaiban</context-root>
+	<jsp-descriptor>
+		<page-check-seconds>-1</page-check-seconds>
+		<verbose>true</verbose>
+		<encoding>utf-8</encoding>
+		<keepgenerated>false</keepgenerated>
+	</jsp-descriptor>
+	<container-descriptor>
+		<servlet-reload-check-secs>-1</servlet-reload-check-secs>
+	</container-descriptor>
+	<!-- 集群环境session复制 -->
+<!-- 	<session-descriptor>
+			<debug-enabled>true</debug-enabled>
+			<persistent-store-type>replicated</persistent-store-type>
+			<sharing-enabled>true</sharing-enabled>
+	</session-descriptor> -->
+</weblogic-web-app>
